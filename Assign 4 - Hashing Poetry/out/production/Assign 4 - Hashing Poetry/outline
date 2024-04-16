@@ -1,0 +1,34 @@
+Objective: Create a random new verse of poetry based upon
+the patterns seen in an existing poem.
+
+Given a document, the program must generate a poem from a given starting word.
+It'll read the specified document and build a bi-word probability model of words.
+Using the specified starting word and the desired length of the poem, create the poem.
+
+1. Update HashTable (DONE)
+2. WritePoetry function
+    a. It collects the contents of the specified file.
+    b. It uses the startWord given
+    c. It uses the length of the
+
+
+Outline of how program works:
+1. Read the file, putting each line into an array.
+2. For each line, split up the words and put them into a new array.
+3. Once each line has been split up and put into the new array, return that array to the main function of the class.
+4. Go through the array one word at a time, evaluating the word or punctuation that immediately goes after it.
+5. Use the WordFreqInfo function to keep track of these words, keeping track of how many times each one appears after the word.
+6. Once you've evaluated how many times this word shows up in the list, adjust the follow-up words in order of lowest frequency to greatest frequency.
+7. All of this information is put into the hash-table, the key being the word/punctuation and the value being the WordFreqInfo.
+    - add new follow up word, set initial frequency count to 1.
+8. Finally, we can start constructing the poem using the startWord given.
+9. You'll start by printing out the startWord and then look at its value in the hashtable.
+10. A randomly generated value will be made between 0 and n-1, n being the total frequency value for a follow-up word.
+    - use the randomly generated value comapred to the range of word frequencies
+
+12. If at any point a punctuation is printed, we will print a new line.
+13. Steps 10-11 repeat, working from word to word.
+14. All the while we keep track of how many times we've printed via wordCount, and once it equates the poem length, the function will end.
+
+2 periods and 5 I's
+

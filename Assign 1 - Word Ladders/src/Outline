@@ -1,0 +1,41 @@
+Write a program that discovers word ladders.
+The code does the following:
+1. Accepts two words of the same length.
+2. Attempts to find the shortest 'word ladder' connecting the two.
+    a. Each word in the ladder MUST differ from the previous one by a single letter.
+    b. Every single rung should be a word in the dictionary
+    c. If there are two or more shortest paths, then the program needs to only print one of them.
+
+
+LadderGame file:
+1 (COMPLETE). Read the provided dictionary.
+2 (COMPLETE). Organize the words into a 2-dimensional array (an ArrayList of ArrayLists).
+    a. Organize them into lists of different word lengths.
+    b. First dimension of the array indicates the word size.
+    c. Second dimension is an array containing all the words of the same length.
+3 (COMPLETE). Create a function to list the words in a list: public void listWords(int length, int howMany)
+    a. Displays to the console the first "howMany" words that have length "letters" in them.
+        i. Won't actually be used for the display; just to verify that the arrays are being organized correctly.
+4. (COMPLETE) Create public ArrayList<String> oneAway(String word, boolean withRemoval)
+    a. Finds and returns all words that are 1 letter away.
+        i. Do a loop where you collect all the words that are 1 letter away.
+        ii. Do another loop where you remove them.
+    b. If withRemoval is "true", then remove the found words from the dictionary.
+5. Create public void play(String start, String end).
+    a. Builds the word ladder from the "start" to the "end", if one exists.
+    b. If a ladder exists, report it. If it doesn't, report "No ladder was found"
+    c. (complete) Verify that the start/end words are the same length before starting. If not, report the error to user.
+    d. (complete) Verify that the start/end words are in the dictionary. If not, report the error to the user.
+
+Algorithm Overview:
+1. Create an initial ladder consisting of the start word.
+2. Place the start word to a "partial solution queue"
+3. While queue is not empty AND ladder is not complete
+    a. Remove the first item from the queue (current shortest partial ladder)
+    b. Criteria for each word:
+        i. Same length of the last word in the ladder (following the start word)
+        ii. Has one different letter from the last word in the partial ladder.
+    c. If the word is equal to the "end" word, then the word ladder is complete.
+    d. If not, extend the current ladder by appending the new word (to a new WordInfo instance)
+    e. Add this new ladder to the queue.
+4. If a solution was found, display it, otherwise indicate a solution wasn't found.

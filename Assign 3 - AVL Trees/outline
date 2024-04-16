@@ -1,0 +1,60 @@
+Idea:
+You can think of the ladder with the
+shortest remaining distance as the one with
+the highest priority, and we always want to
+select the next ladder as the one with the
+highest priority (shortest remaining distance).
+
+For each possible choice, store the expected total work to reach a solution;
+how much work has already been done, plus an estimate of how much work remains.
+The expected total work is termed the priority, therefore, lower is better.
+
+Algorithm:
+1. Insert the initial state into a priority queue (an AVL tree).
+2. Remove from the priority queue (AVL tree) the state with the
+smallest expected total work (highest priority).
+3. Add to the priority queue all neighboring states;
+the ones that can be reached in one more move, appropriate estiamted total work for each.
+4. Repeat procedure until the state (word) obtained from the most
+recent call to get the neighboring states (oneAway method) has the
+end state (end word).
+(reworded)
+1. Current word into priority queue.
+2.
+
+One possible way to estimate work:
+    The current length of the ladder
+    +
+    The number of letters that are NOT correct
+    (minimum numbers of steps to the goal)
+
+Other Notes:
+    1. You have to keep track of previously used words and how long of a
+    ladder they are a part of.????
+    2. As one-away words (and their ladders) are considered, they should
+    be checked against the list of previously used words.
+    3a. If the current word ISN'T apart of the previously used words list,
+    then add the new word ladder to the queue
+        i. Also add the word to the list of previously used words (along
+        with the length of the ladder).
+    3b. If the word is found in the previously used list of words AND the new ladder is shorter,
+    then the entry for that word in the previously used list of words needs to be
+    updated with the length of the new (and shorter) ladder.
+        i. And, the new word ladder is added to the priority queue.
+    3c. IF the new ladder is longer, it isn't added to the priority queue.
+
+  So, you'll want to create another class (private to LadderGamePriority.java) that
+  holds both the word and the length of the ladder, implementing the Comparable inerface
+  on a String (the word).
+
+
+
+(We're not organizing the dictionary.)
+LadderGamePriority
+    -play method starts
+    -start with the start word given
+    -run a while loop finding all of the oneAway words
+    -whenever a oneAway word is found, throw it into the Queue (AVL Tree)
+
+Queue
+    -Accepts a word and inserts it into an AvlTree.

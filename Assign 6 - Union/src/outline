@@ -1,0 +1,80 @@
+This assignment uses disjoint sets/unions.
+
+Two parts:
+1. Implementation of a disjoint set using path compression.
+2. Use the disjoint set to play the game of Hex
+
+1. Implementing the Disjoint Set.
+    a. The code of the union/find operations should use path compression,
+    handle a set of any number of elements, and use a smart union (by size).
+    b. Class name: DisjointSet
+    c. It only needs to handle integers.
+    d. Constructor
+        i. Total number of nodes
+    e. The union operation must use this signature: public void union(int node1, int node2)
+    f. The find operation must use this signature: public int find(int node)
+    g. Use smart union find
+    h. Use path compression
+        i. Can use the disjoint set code in Mathias' slides.
+
+
+2. Game of Hex
+    a. The game of Hex is played on a grid of hexagons.
+    Hex is a strategy board game for two players,
+    played on a grid, theoretically of any size and possible shapes.
+    But traditionally played as an 11 x 11 rhombus.
+    Players (red and blue) alternate placing markers
+    on unoccupied spaces in an attempt to link their
+    opposite sides of the board in an unbroken chain.
+    The blue player attempts to link the two blue edges,
+    while the red player attempts to link the red edges.
+    b. The neighbors of a non-edge node x are x-1, x+1, x-11, x-10,
+    x+10, x+11
+
+
+
+
+
+    //Essentially, we're making the edge's the roots for each player to play off of.
+    //if parent of 125 is 124, then we have a connection.
+
+    //Create an if-else tree detecting if there is any variable at an index.
+    //If not, then no one has played at that space, so print 0.
+    //Otherwise, print either B or R.
+
+    //Whenever a player goes to put a number down, first verify that the other array
+    //hasn't already put something there.
+        //Is there an isEmpty for
+
+    //To verify that a square hasn't been taken,
+        //simply run a find() on the square.
+        //If it's 0, then it's free to play on and be put into either R or B.
+
+    //For each box in the array, do a for loop via the size and set everything to 0.
+
+    //If we're looking at playRed,
+        //set index 0 of the array to the value 122.
+    //Rather than have a size of just 121, we want to make the size 123.
+    //We set 123 to 123, it's the bottom edge.
+    //Pretty much have to hard-code for the printGrid, for any cell touching the top edge,
+        //they're going to print the index 0 cell and vice versa for the bottom edge.
+
+
+
+    //So there needs to be an array of integers where the index represents the number.
+    //The contents of the array -- strangely -- will be used to signify the unions
+        //between each value.
+    //For instance, if numbers 1 and 7 were in Union like Union(1, 6),
+        //then the content of index 7 -- which originally is also 7 --
+            //will instead be transformed into 1. Then, whenever we go to check
+                //at index 7, it'll point to index 1.
+
+    //Ignore above summary.
+    //We're going to use a Smart Union (by size).
+    //In this, the array will have each index's content point to its parent,
+        //but each parent will hold a negative value representing how many nodes point to it.
+    //However, for each index that isn't pointing to anything and doesn't have anything pointing to it,
+        //it's index will be -1.
+    //So, a node with 4 children will have a value of -5: -1 + -4.
+
+

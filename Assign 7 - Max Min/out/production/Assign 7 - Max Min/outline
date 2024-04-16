@@ -1,0 +1,161 @@
+Fundamental:
+Using the provided input files that represent graphs and
+their edge weights (flow), compute the max flow between starting
+and ending vertices in the graphs,
+along with the min cut for those same starting and ending vertices.
+
+The Graph and GraphNode classes work with an adjecency list; don't change
+this type of list.
+
+findMaxFlow:
+Purpose: Display the augmenting paths and edges.
+Outline:
+- After call, total flow is displayed.
+
+findMinCut
+Outline:
+- During call, display of which edges to cut is done.
+
+Professor prefers to have these outputs (the total flow and the display of
+which edges to cut) returned to and reported separately from these methods.
+But he's saying to not focus too critically on this and what not, it isn't
+the point of the assignment.
+
+DON'T MODIFY GraphNode CLASS.
+-> Can modify addEdge, depending on what algorithm you implement.
+
+
+Conversation Rule:
+    The sum of flow coming into a vertex must equal the flow coming out of a vertex, for each vertex except the source/sink.
+
+Adjacency Matrix for graph + Residual Graph
+OR
+Adjacency Matrix being able to hold info for all of it.
+
+How Adjacency Matrix Works:
+● A[i][j] = true; if (i, j) is an edge
+● A[i][j] = false; if (i, j) is not an edge
+● A=
+  0 1 0 1 0 Node 0, pointing to node 1 and node 3
+  0 0 1 0 0 Node 1
+  0 0 1 0 0 Node 2
+  1 0 0 0 0 Node 3
+  0 0 0 1 0 Node 4
+  Along the same row, 1's (which represent true) represent the node pointing at other nodes.
+  So, the first row represents node 0, and looking along it, we can see that each 1 represents
+  another node that it is pointing at. So in this case, Node 0 is pointing to node 1 and node 3.
+
+Input File Format:
+First row is number of vertexes
+(beginning vertex) (ending vertex) (edge weight)
+repeat
+
+Algorithms
+- Max Flow: Edmonds Karp (public int findMaxFlow(int s, int t, boolean report))
+Items:
+- Starting vertex s. Only has out-edges. (Only exports) THE SOURCE
+- Termination Vertex t. Only has in-edges. (Only imports) THE SINK
+- Total Flow. The total flow that is going into the sink.
+- Residual Graph. Highlights forward and backward flow of a network flow. The forward flow is the summation of the
+capacity of that edge minus the amount of flow sent down it. The backward flow is how much flow was sent through.
+- Augmenting Path. Evaluates where an amount of flow could be sent in order to send more flow to the sink.
+- Available Flow. Go along the augmenting path, we look to see how much of the flow we can possibly move through the path.
+- Vertex v.
+- Vertex w.
+- Priority Queue.
+
+So we have the original graph, and then as we create flows from the source to the sink, we update the
+residual graph, and then we check for any augmenting paths and update the residual graph if there are any.
+And then if there are no augmenting paths left, then we're done. It'll return false.
+
+Overall Abstraction:
+    total flow = 0
+    while (starting vertex < augmenting path < terminating vertex)
+
+        QUESTION: Do I also have to account for terminating vertex < aug path < starting vertex (NOPE, IT ALREADY DEALS WITH IT)
+
+        1. the available flow = the largest possible Integer Java can make
+        2. Follow the augmenting path from the terminating vertex to the starting vertex; using v as current vertex
+
+            QUESTION: So we iteratively go through each vertex between s and t ON THE AUGMENTING PATH,
+            and we keep track of which vertex v we're currently on as we go.
+
+            a. available flow = minimum of available flow OR the residual flow @ vertex v. (WHICHEVER IS THE LEAST IN THIS CASE) (FINDING THE EDGE WITH THE LEAST AMOUTN OF FLOW AVAILABLE)
+
+                QUESTION: What is the residual flow at vertex v..? THE RESIDUAL FLOW ON THE RESIDUAL GRAPH, LOOKING AT WHAT FLOW IS AVAILABLE
+                and I'm assuming in this case
+                we're looking for whichever is lower, min of af or this residual flow.
+
+        3. Follow the augmenting path from terminating vertex to starting vertex (THIS IS UPDATING RESIDUAL GRAPH) (NEXT TIME WE SEARCH FOR AUGMENTING PATH, WE'RE LOOKING AT THE UPDATED RESIDUAL GRAPH)
+
+            QUESTION: Was the t and s here supposed to be flipped..?
+
+            a. Update the residual graph
+
+            QUESTION: What's the residual graph?
+
+                i. Subtract the available flow at vertex v in direction of the starting vertex to
+                the termination vertex.
+
+                    QUESTION: So, Vertex V minus Available Flow? (V - AF) (SUBTRACT THE AVAILABLE FLOW ON THE EDGE IN THE DIRECTION OF S TO T FROM THE EDGE V -> THE NEXT)
+                    (CAPACITY OF THE EDGE MINUS THE FLOW THAT'S GOING THROUGH IT)
+
+
+                ii. Add available flow at vertex v in direction fo termination vertex
+                to starting vertex.
+
+                    QUESTION: V plus Available Flow? And is this flip just the representation
+                    of doing V +/- AF?
+
+        4. Add available flow to the total flow.
+
+            NOTE: I'm assumin this is just keep the total flow of the overall graph updated.
+
+
+So, that abstraction doesn't quite go over how the augmenting path is computed.
+This is a BREADTH-FIRST SEARCH (SHORTEST PATH) over the graph, looking for a way to get flow from s to t.
+Here's the outlien:
+    1. Reset the "parent" on all vertices
+        a. Parent is the vertex that flow comes from, computed during this algorithm.
+
+            QUESTION: Where is this parent calculated at, exactly? (WE'RE JUST SAYING WE DON'T KNOW WHAT THE PARENT IS)
+    2. Add the starting vertex to the queue. (FIRST-IN FIRST-OUT QUEUE)
+    3. while queue is NOT empty AND the terminating vertex does NOT have a parent.
+    (so something like while(!queue.empty() && t.parent == null)
+        remove from priority queue as vertex v
+        for all successor edges from vertex v,
+            for the edge, call the other vertex w
+
+                QUESTION: how do you call this other vertex w? (W IS THE VERTEX OF EACH EDGE WE'RE ITERATIVELY GOING THROUGH)
+
+            if there is residual capacity from vertex v to vertex w AND not already part of the augmenting path,
+            AND it isn't the starting vertex, then it can be used.
+            (residual capacity != 0 from v to w, isn't with ap, isn't starting vertex)
+
+                QUESTION: how would we check for the residual capacity and whether or not it isn't
+                apart of the augmenting path? (REFER TO OTHER ALGORITHM STUFF)
+
+                remember the path; w's parent becomes v
+                add w to the queue
+    4. if terminating vertex has a parent, then there is an augmenting path from starting vertex
+    to terminating vertex.
+
+
+
+
+Submission Details:
+- For line 26 in Graph.java, we need to write out an explanation of
+why this line of code is necessary in order for the algorithm to work
+correctly. This should be submitted in a README.TXT file.
+
+
+
+
+When going through the graph/matrix, if we find any vertex whose edges have a non-zero residual value,
+then we want to throw the vertexes those edges point at onto the queue to evaluate their related edges/capacities.
+The minimum of the residual is evaluated from the terminating vertex all the way to the start, found via looking at
+t's parent and so on and so forth, and THIS is determined whenever a vertex is put onto a queue, we designate whose
+parent theirs is.
+
+
+
